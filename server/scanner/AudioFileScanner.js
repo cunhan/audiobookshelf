@@ -8,6 +8,10 @@ const parseSeriesString = require('../utils/parsers/parseSeriesString')
 const LibraryItem = require('../models/LibraryItem')
 const AudioFile = require('../objects/files/AudioFile')
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 class AudioFileScanner {
   constructor() {}
 
@@ -187,14 +191,18 @@ class AudioFileScanner {
    * @returns {Promise<AudioFile[]>}
    */
   async executeMediaFileScans(mediaType, libraryItemScanData, audioLibraryFiles) {
-    const batchSize = 32
+    const batchSize = 1
+    Logger.debug(`fix batchSize: ${batchSize}`)
     const results = []
     for (let batch = 0; batch < audioLibraryFiles.length; batch += batchSize) {
       const proms = []
       for (let i = batch; i < Math.min(batch + batchSize, audioLibraryFiles.length); i++) {
+        Logger.debug("等待5秒，再去刮削下一个文件")
+        await sleep(5000)
         proms.push(this.scan(mediaType, audioLibraryFiles[i], libraryItemScanData.mediaMetadata))
       }
       results.push(...(await Promise.all(proms).then((scanResults) => scanResults.filter((sr) => sr))))
+      
     }
 
     return results
