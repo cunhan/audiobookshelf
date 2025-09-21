@@ -7,6 +7,7 @@ const parseNameString = require('../utils/parsers/parseNameString')
 const parseSeriesString = require('../utils/parsers/parseSeriesString')
 const LibraryItem = require('../models/LibraryItem')
 const AudioFile = require('../objects/files/AudioFile')
+const fsExtra = require('../libs/fsExtra')
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -158,6 +159,8 @@ class AudioFileScanner {
    * @returns {Promise<AudioFile>}
    */
   async scan(mediaType, libraryFile, mediaMetadataFromScan) {
+    // crack: 读取strm内记载的m4b真实路径，替换path
+    libraryFile.metadata.path = fsExtra.readFileSync(libraryFile.metadata.path, 'utf8')
     const probeData = await prober.probe(libraryFile.metadata.path)
 
     if (probeData.error) {
@@ -198,11 +201,11 @@ class AudioFileScanner {
       const proms = []
       for (let i = batch; i < Math.min(batch + batchSize, audioLibraryFiles.length); i++) {
         Logger.debug("等待5秒，再去刮削下一个文件")
-        await sleep(5000)
+        // await sleep(5000)
+        Logger.debug("正在读取...", audioLibraryFiles[i].metadata.path)
         proms.push(this.scan(mediaType, audioLibraryFiles[i], libraryItemScanData.mediaMetadata))
       }
       results.push(...(await Promise.all(proms).then((scanResults) => scanResults.filter((sr) => sr))))
-      
     }
 
     return results
