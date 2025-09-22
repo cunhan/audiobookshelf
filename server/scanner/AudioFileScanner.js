@@ -160,7 +160,10 @@ class AudioFileScanner {
    */
   async scan(mediaType, libraryFile, mediaMetadataFromScan) {
     // crack: 读取strm内记载的m4b真实路径，替换path
-    libraryFile.metadata.path = fsExtra.readFileSync(libraryFile.metadata.path, 'utf8')
+    // 先检测是否strm再替换
+    if (libraryFile.metadata.ext === '.strm'){
+        libraryFile.metadata.path = fsExtra.readFileSync(libraryFile.metadata.path, 'utf8')
+    }
     const probeData = await prober.probe(libraryFile.metadata.path)
 
     if (probeData.error) {
