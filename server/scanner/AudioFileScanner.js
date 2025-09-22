@@ -204,7 +204,7 @@ class AudioFileScanner {
       const proms = []
       for (let i = batch; i < Math.min(batch + batchSize, audioLibraryFiles.length); i++) {
         Logger.debug("等待5秒，再去刮削下一个文件")
-        // await sleep(5000)
+        await sleep(5000)
         Logger.debug("正在读取...", audioLibraryFiles[i].metadata.path)
         proms.push(this.scan(mediaType, audioLibraryFiles[i], libraryItemScanData.mediaMetadata))
       }

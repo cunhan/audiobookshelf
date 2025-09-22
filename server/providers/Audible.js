@@ -96,6 +96,8 @@ class Audible {
     asin = encodeURIComponent(asin.toUpperCase())
     var regionQuery = region ? `?region=${region}` : ''
     var url = `https://api.audnex.us/books/${asin}${regionQuery}`
+    // 以本地数据库替代audnex api
+    var url = `http://192.168.2.219:18888/E%3A/PortableApp/_KindleTools/audible-cli-1/audible_meta/${asin}.json`
     Logger.debug(`[Audible] ASIN url: ${url}`)
     return axios
       .get(url, {
