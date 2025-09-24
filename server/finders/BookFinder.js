@@ -373,8 +373,9 @@ class BookFinder {
    */
   async search(libraryItem, provider, title, author, isbn, asin, options = {}) {
     // Logger.debug(libraryItem)
-    if (isValidASIN(libraryItem.relPath.slice(-14, -4))){
-      asin = libraryItem.relPath.slice(-14, -4)
+    let pos = libraryItem.dataValues.libraryFiles[0].metadata.ext.length
+    if (isValidASIN(libraryItem.relPath.slice(-10-pos, -pos))){
+      asin = libraryItem.relPath.slice(-10-pos, -pos)
       Logger.debug(`Find asin:${asin} from relpath.`)
     }
     
