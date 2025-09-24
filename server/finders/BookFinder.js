@@ -372,6 +372,12 @@ class BookFinder {
    * @returns {Promise<Object[]>}
    */
   async search(libraryItem, provider, title, author, isbn, asin, options = {}) {
+    // Logger.debug(libraryItem)
+    if (isValidASIN(libraryItem.relPath.slice(-14, -4))){
+      asin = libraryItem.relPath.slice(-14, -4)
+      Logger.debug(`Find asin:${asin} from relpath.`)
+    }
+    
     let books = []
     const maxTitleDistance = !isNaN(options.titleDistance) ? Number(options.titleDistance) : 4
     const maxAuthorDistance = !isNaN(options.authorDistance) ? Number(options.authorDistance) : 4
