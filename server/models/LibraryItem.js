@@ -117,7 +117,7 @@ class LibraryItem extends Model {
         }
       ],
       order: [
-        ['createdAt', 'ASC'],
+        ['createdAt', 'DESC'],
         // Ensure author & series stay in the same order
         [this.sequelize.models.book, this.sequelize.models.author, this.sequelize.models.bookAuthor, 'createdAt', 'ASC'],
         [this.sequelize.models.book, this.sequelize.models.series, 'bookSeries', 'createdAt', 'ASC']
@@ -125,7 +125,7 @@ class LibraryItem extends Model {
       offset,
       limit
     })
-  }
+  }  
 
   /**
    * Remove library item by id
