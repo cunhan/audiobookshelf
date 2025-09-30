@@ -439,7 +439,10 @@ class Scanner {
 
       if (libraryItem.media.asin && library.settings.skipMatchingMediaWithAsin) {
         Logger.debug(`[Scanner] matchLibraryItems: Skipping "${libraryItem.media.title}" because it already has an ASIN (${i + 1} of ${libraryItems.length})`)
-        continue
+        Logger.debug('[Scanner] Skipped items found, Quick Match is cancelled.')
+        // 个人专用，遇到skip ASIN的items，直接中止快速匹配进程。
+        return false
+        // continue
       }
 
       if (libraryItem.media.isbn && library.settings.skipMatchingMediaWithIsbn) {
